@@ -6,6 +6,7 @@ export const useAppStore = defineStore('app', {
         news: [],
       favorite: [],
         isLogin: false,
+        isHome: true
       }),
       actions:{
         async login(loginData){
@@ -20,19 +21,31 @@ export const useAppStore = defineStore('app', {
                 this.readData()
                 this.isLogin = true
                 this.$router.push('/HomePage')
+                Swal.fire("Succces!", "Login", "success");
             } catch (error) {
                 console.log(error, `<<<<<<`);
+                Swal.fire({
+                  title: "Error!",
+                  text: error.response.data.message,
+                  icon: "error",
+                  confirmButtonText: "Cool",
+                });
             }
         },
         logout(){
             localStorage.removeItem("access_token")
             this.isLogin = false
             this.$router.push('/')
+            Swal.fire("Succces!", "Logout", "success");
         },
-        async readData(){
+        async readData(result){
+          let search=''
+          if(result){
+            search = `?q=${result}`
+          }
             try {
                 const data = await axios({
-                    url: `http://localhost:3000/getNews`,
+                    url: `http://localhost:3000/getNews`+ search,
                     method: 'get',
                     headers: {
                         access_token: localStorage.access_token
@@ -59,8 +72,15 @@ export const useAppStore = defineStore('app', {
                     },
                   });
                   this.$router.push("/");
+                  Swal.fire("Succces!", "Register", "success");
             } catch (error) {
-                console.log(error);
+                // console.log(error, `<<<<<<<<<<<<<<<<<<<<`);
+                Swal.fire({
+                  title: "Error!",
+                  text: error.response.data.message,
+                  icon: "error",
+                  confirmButtonText: "Cool",
+                });
             }
         },
         async bookmarks(result){
@@ -78,8 +98,15 @@ export const useAppStore = defineStore('app', {
                   access_token: localStorage.getItem("access_token")
                 }
               })
+              Swal.fire("Succces!", "Add Bookmark", "success");
             } catch (error) {
                 console.log(error);
+                Swal.fire({
+                  title: "Error!",
+                  text: error.response.data.message,
+                  icon: "error",
+                  confirmButtonText: "Cool",
+                });
             }
           },
           async myNews(){

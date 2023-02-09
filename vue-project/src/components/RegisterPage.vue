@@ -17,7 +17,6 @@ export default {
         email: this.email,
         password: this.password
       })
-      this.$router.push('/')
     }
   }
 }
@@ -38,7 +37,7 @@ export default {
             <input v-model="email" type="text" name="" class="form-control" placeholder="Email">
             <br>
             <input v-model="password" type="password" name="" class="form-control" placeholder="Password"><br>
-            <button class="btn btn-dark btn-block">Login</button><br><br>
+            <button class="btn btn-dark btn-block">Register</button><br><br>
           </div>
         </div>
         <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
