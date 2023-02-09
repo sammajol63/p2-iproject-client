@@ -9,11 +9,34 @@ export const useAppStore = defineStore('app', {
         isHome: true
       }),
       actions:{
+        async googlelogin(response) {
+          try {
+            let { data } = await axios({
+              method: "POST",
+              url: "https://agregationnews-production.up.railway.app/loginGoogle",
+              data: {
+                idToken: response.credential,
+              },
+            });
+            localStorage.setItem("access_token", data.access_token);
+            this.isLogin = true
+            this.$router.push('/HomePage')
+            Swal.fire("Succces!", "Login", "success");
+          } catch (error) {
+            console.log(error, `<<<<<<<<<<<<<`);
+            Swal.fire({
+              title: "Error!",
+              text: error.response.data.message,
+              icon: "error",
+              confirmButtonText: "Ok",
+            });
+          }
+        },
         async login(loginData){
             // console.log(loginData);
             try {
                 const {data} = await axios({
-                    url: `http://localhost:3000/login`,
+                    url: `https://agregationnews-production.up.railway.app/login`,
                     method: 'post',
                     data: loginData
                 }) 
@@ -45,7 +68,7 @@ export const useAppStore = defineStore('app', {
           }
             try {
                 const data = await axios({
-                    url: `http://localhost:3000/getNews`+ search,
+                    url: `https://agregationnews-production.up.railway.app/getNews`+ search,
                     method: 'get',
                     headers: {
                         access_token: localStorage.access_token
@@ -60,7 +83,7 @@ export const useAppStore = defineStore('app', {
         async register(result){
             try {
                 const { data } = await axios({
-                    url: "http://localhost:3000/register",
+                    url: "https://agregationnews-production.up.railway.app/register",
                     method: "post",
                     data: {
                       name: result.name,
@@ -86,7 +109,7 @@ export const useAppStore = defineStore('app', {
         async bookmarks(result){
             try {
               const {data} = await axios({
-                url:`http://localhost:3000/bookmarks`,
+                url:`https://agregationnews-production.up.railway.app/bookmarks`,
                 method:'post',
                 data: {
                   title: result.title,
@@ -112,7 +135,7 @@ export const useAppStore = defineStore('app', {
           async myNews(){
             try {
               const {data} = await axios({
-                url: `http://localhost:3000/myNews`,
+                url: `https://agregationnews-production.up.railway.app/myNews`,
                 method: "get",
                 headers:{
                   access_token: localStorage.access_token

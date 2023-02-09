@@ -9,14 +9,18 @@ import { useAppStore } from '../stores/app';
         }
     },
     methods:{
-        ...mapActions(useAppStore, ['login']),
+        ...mapActions(useAppStore, ['login', 'googlelogin']),
         handleLogin(){
             this.login({
                 email: this.email,
                 password: this.password
             })
             this.$router.push('/HomePage')
-        }
+        },
+        callback(response){
+          console.log(response, `<<<<<<<<<<<LOGIN<`);
+          this.googlelogin(response)
+        },
     }
     }
 </script>
@@ -37,11 +41,16 @@ import { useAppStore } from '../stores/app';
             <input v-model="password" type="password" name="" class="form-control" placeholder="Password"><br>
             <button class="btn btn-dark btn-block">Login</button> &nbsp
             <button @click.prevent="this.$router.push(`/RegisterPage`)" class="btn btn-dark btn-block">Register</button><br><br>
+            <GoogleLogin :callback="callback"/>
+                      <button type="submit" class="btn btn-link btn-floating mx-1">
+                        <i class="fab fa-github"></i>
+                      </button>
           </div>
         </div>
         <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
         </div>     
        </div>
+
       </form>
 </div>
 </div>
